@@ -1,0 +1,1638 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Anatomie města — Praha 5</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,800;1,9..144,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@lottiefiles/dotlottie-wc@0.9.10/dist/dotlottie-wc.js" type="module"></script>
+<style>
+  @font-face {
+    font-family: 'ABCDiatypeRoundedSemiMono';
+    src: url('fonts/ABCDiatypeRoundedSemi-Mono-Bold-Trial.otf') format('opentype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'ABCDiatypeRounded';
+    src: url('fonts/ABCDiatypeRoundedEdu-Bold.woff2') format('woff2');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+  }
+  @font-face {
+    font-family: 'ABCDiatypeEdu';
+    src: url('fonts/ABCDiatypeEdu-Medium.woff') format('woff');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+  }
+  :root {
+    --bg: #f2efe8;
+  :root {
+    --display: 'ABCDiatypeRoundedSemiMono', sans-serif;
+    --mono: 'ABCDiatypeRoundedSemiMono', sans-serif;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; overflow-x: hidden; }
+
+  body {
+    font-family: var(--display);
+    background: #d1f492;
+    color: #000;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+    position: relative;
+  }
+
+  .app { position: relative; z-index: 1; min-height: 100vh; }
+
+  /* Анимация появления экрана */
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .theme-screen {
+    padding: 0;
+    animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* ===== СКРЫТИЕ/ПОКАЗ ЭКРАНОВ ===== */
+  .screen { display: none; }
+  .screen.active { display: block; }
+
+  /* ===== SCREEN Z — nový design ===== */
+
+  .sz-screen {
+    background: #d1f492;
+    min-height: 100vh;
+    padding: 0;
+    animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  .sz-shell {
+    background: #d1f492;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0 auto;
+    max-width: 390px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  .sz-header {
+    background: #000;
+    border-radius: 0 0 30px 30px;
+    height: 94px;
+    padding: 0;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .sz-header-title {
+    font-family: 'ABCDiatypeRoundedSemiMono', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 1;
+    position: absolute;
+    left: 30px;
+    top: 45px;
+    white-space: nowrap;
+  }
+
+  .sz-header-meta {
+    font-family: 'ABCDiatypeEdu', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: #fff;
+    text-align: right;
+    line-height: 1.1;
+    width: 156px;
+    position: absolute;
+    right: 30px;
+    top: 45px;
+    margin: 0;
+  }
+
+  .sz-main {
+    flex: 1;
+    position: relative;
+  }
+
+  .sz-title {
+    font-family: 'ABCDiatypeRoundedSemiMono', sans-serif;
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1;
+    color: #000;
+    display: inline-block;
+    width: auto;
+    padding: 27px 30px 0;
+    margin: 0;
+    letter-spacing: 0;
+    white-space: normal;
+  }
+
+  .sz-title-nowrap {
+    white-space: nowrap;
+  }
+
+  .sz-illustration {
+    padding: 30px 0 0 31px;
+    overflow: hidden;
+    margin-top: -160px;
+    position: relative;
+    z-index: 2;
+  }
+
+  /* Когда заголовок занимает 2 строки вместо 3 (например, на P "Pohyb / pro všechny"),
+     иллюстрация поднимается слабее, чтобы карточка снизу начиналась на том же уровне,
+     что и у тем с 3-строчным заголовком. ~42px = высота одной строки .sz-title. */
+  .sz-illustration--short-title {
+    margin-top: -118px;
+  }
+
+  /* На P Lottie опускается на 25px ниже внутри блока (15+10),
+     чтобы визуально лучше центрироваться. Карточка снизу остаётся на месте. */
+  .sz-illustration--push-down {
+    padding-top: 55px;
+    margin-bottom: -25px;
+  }
+
+  /* Lottie-анимации на всех экранах тем имеют одинаковый размер */
+  .sz-lottie,
+  #sz-lottie {
+    width: min(calc(100vw - 41px), 349.35px);
+    max-width: 349.35px;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    position: relative;
+  }
+
+  dotlottie-wc {
+    width: 100%;
+    height: 100%;
+  }
+
+  .sz-card-area {
+    position: relative;
+    margin: 21px 30px 0;
+    width: 330px;
+    max-width: calc(100% - 60px);
+  }
+
+  .sz-audio-btn {
+    position: absolute;
+    top: -33px;
+    right: -24px;
+    width: 82px;
+    height: 82px;
+    border-radius: 50%;
+    background: #d1f492;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+
+  .sz-audio-btn:active { opacity: 0.75; }
+
+  .sz-audio-core {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .sz-audio-btn img,
+  .sz-audio-btn svg {
+    display: block;
+    width: 56px;
+    height: 56px;
+  }
+
+  .sz-card {
+    background: #fff;
+    border-radius: 30px;
+    padding: 30px 60px 30px 30px;
+    position: relative;
+    z-index: 0;
+  }
+
+  .sz-card p {
+    font-family: 'ABCDiatypeRounded', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.1;
+    color: #000;
+    margin: 0;
+  }
+
+  .sz-card p + p {
+    margin-top: 1em;
+  }
+
+  .sz-bottom {
+    position: relative;
+    padding: 37px 0 0 30px;
+    min-height: 227px;
+  }
+
+  .sz-more-link {
+    font-family: 'ABCDiatypeEdu', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.1;
+    color: #000;
+    text-decoration: none;
+    max-width: 169px;
+    flex-shrink: 0;
+    display: block;
+    align-self: flex-end;
+    padding-bottom: 12px;
+  }
+
+  .sz-cta-wrap {
+    position: absolute;
+    right: -14px;
+    top: 11px;
+  }
+
+  .sz-yellow-circle {
+    width: 201px;
+    height: 201px;
+    background: #FFE000;
+    border-radius: 50%;
+    transform: rotate(18deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .sz-circle-content {
+    text-align: center;
+    width: 145px;
+    padding: 0 8px;
+  }
+
+  .sz-fraction {
+    font-family: 'ABCDiatypeRounded', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1.1;
+    color: #000;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .sz-cta-label {
+    font-family: 'ABCDiatypeRounded', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.1;
+    color: #000;
+    text-transform: uppercase;
+    display: block;
+  }
+
+  /* Когда круг становится ссылкой на финал — размеры особые, но ритм отступов
+     наследуется от обычного счётчика, чтобы flex одинаково центрировал содержимое. */
+  .sz-cta-finale-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    -webkit-tap-highlight-color: transparent;
+    transition: transform 0.2s;
+  }
+
+  .sz-cta-finale-link:active .sz-yellow-circle {
+    transform: rotate(18deg) scale(0.96);
+  }
+
+  .sz-cta-finale-link .sz-fraction {
+    font-size: 28px;
+    line-height: 1.1;
+    margin-bottom: 5px;
+  }
+
+  .sz-cta-finale-link .sz-cta-label {
+    font-size: 16px;
+    line-height: 1.1;
+  }
+
+  .sz-progress {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    clip-path: inset(50%);
+    white-space: nowrap;
+    border: 0;
+  }
+
+  .sz-screen .letters-row {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    border: none;
+    padding: 0;
+    background: none;
+  }
+
+  .sz-screen .letter-btn {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    border: 2px solid #000;
+    background: transparent;
+    font-family: 'ABCDiatypeRounded', sans-serif;
+    font-weight: 700;
+    font-size: 18px;
+    color: #000;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .sz-screen .letter-btn.found {
+    background: #000;
+    color: #d1f492;
+    border-color: #000;
+  }
+
+  .sz-screen .letter-btn.found::after {
+    display: none;
+  }
+
+  .sz-counter-text {
+    font-family: 'ABCDiatypeEdu', sans-serif;
+    font-size: 13px;
+    line-height: 1.1;
+    color: rgba(0,0,0,0.55);
+    margin-top: 10px;
+  }
+
+  .sz-footer {
+    background: #000;
+    height: 60px;
+    border-radius: 30px 30px 0 0;
+    flex-shrink: 0;
+    margin-top: auto;
+  }
+
+  .sz-lottie-placeholder {
+    width: min(calc(100vw - 41px), 349.35px);
+    max-width: 349.35px;
+    aspect-ratio: 1 / 1;
+    height: auto;
+    border: 2px dashed rgba(0, 0, 0, 0.25);
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    background: rgba(255, 255, 255, 0.25);
+  }
+
+  .sz-lottie-placeholder span {
+    font-family: 'ABCDiatypeEdu', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    color: rgba(0, 0, 0, 0.5);
+    line-height: 1.1;
+  }
+
+  @media (min-width: 391px) {
+    .sz-screen {
+      padding: 0 24px;
+    }
+
+    .sz-shell {
+      min-height: 100vh;
+    }
+  }
+
+  /* ===== HOME (стартовая) и FINALE — общий каркас в стиле Z ===== */
+
+  #screen-home,
+  #screen-finale {
+    background: #d1f492;
+    min-height: 100vh;
+    padding: 0;
+    animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  /* Используем тот же шелл и шапку, что у тем — переопределяем общие стили старого .hero/.finale */
+  #screen-home .hero,
+  #screen-home .progress-wrap,
+  #screen-home > header,
+  #screen-home > footer { display: none; }
+
+  #screen-finale .finale { display: none; }
+
+  .hf-shell {
+    background: #d1f492;
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0 auto;
+    max-width: 390px;
+    overflow: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  .hf-header {
+    background: #000;
+    border-radius: 0 0 30px 30px;
+    height: 94px;
+    padding: 0;
+    position: relative;
+    flex-shrink: 0;
+  }
+
+  .hf-header-title {
+    font-family: 'ABCDiatypeRoundedSemiMono', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    color: #fff;
+    text-transform: uppercase;
+    line-height: 1;
+    position: absolute;
+    left: 30px;
+    top: 45px;
+    white-space: nowrap;
+  }
+
+  .hf-header-meta {
+    font-family: 'ABCDiatypeEdu', sans-serif;
+    font-weight: 500;
+    font-size: 12px;
+    color: #fff;
+    text-align: right;
+    line-height: 1.1;
+    width: 156px;
+    position: absolute;
+    right: 30px;
+    top: 45px;
+    margin: 0;
+  }
+
+  .hf-main {
+    flex: 1;
+    position: relative;
+    padding: 0 30px;
+  }
+
+  .hf-title {
+    font-family: 'ABCDiatypeRoundedSemiMono', sans-serif;
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1;
+    color: #000;
+    margin: 16px 0 0;
+    letter-spacing: 0;
+  }
+
+  /* Заголовок финала идёт сразу под хедером, как .sz-title на темах (27px) */
+  .hf-title--top {
+    padding-top: 27px;
+    margin: 0;
+  }
+
+  .hf-lead {
+    font-family: 'ABCDiatypeEdu', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.1;
+    color: #000;
+    margin: 24px 0 0;
+    max-width: 320px;
+  }
+
+  /* Большие круги-буквы — рифма с жёлтым кругом, та же круглая форма */
+  .hf-circles {
+    display: flex;
+    gap: 8px;
+    margin: 40px 0 0;
+    justify-content: flex-start;
+    max-width: 330px;
+  }
+
+  .hf-circle {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    border: 2.5px solid #000;
+    background: transparent;
+    font-family: 'ABCDiatypeRoundedSemiMono', sans-serif;
+    font-weight: 700;
+    font-size: 32px;
+    color: #000;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: transform 0.2s, background 0.2s, color 0.2s;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  .hf-circle.found {
+    background: #000;
+    color: #d1f492;
+  }
+
+  /* Найденные кликабельные — указатель руки. Ненайденные — обычный курсор. */
+  a.hf-circle.found:active { transform: scale(0.96); }
+  span.hf-circle { cursor: default; }
+
+  .hf-status {
+    font-family: 'ABCDiatypeEdu', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.1;
+    color: #000;
+    margin: 10px 0 0;
+    max-width: 330px;
+  }
+
+  /* CTA-блок внизу — жёлтый круг, как на темах */
+  .hf-bottom {
+    position: relative;
+    padding: 50px 0 30px;
+    min-height: 240px;
+  }
+
+  .hf-bottom-left {
+    max-width: 170px;
+    padding-bottom: 16px;
+    padding-right: 12px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .hf-action-link {
+    font-family: 'ABCDiatypeEdu', sans-serif;
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 1.1;
+    color: #000;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .hf-action-link + .hf-action-link {
+    margin-top: 14px;
+  }
+
+  .hf-yellow-wrap {
+    position: absolute;
+    right: -44px;
+    top: 30px;
+    z-index: 0;
+  }
+
+  .hf-yellow-circle {
+    width: 201px;
+    height: 201px;
+    background: #FFE000;
+    border-radius: 50%;
+    transform: rotate(18deg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+  }
+
+  .hf-yellow-content {
+    text-align: center;
+    width: 145px;
+    padding: 0 8px;
+  }
+
+  .hf-fraction {
+    font-family: 'ABCDiatypeRounded', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1.1;
+    color: #000;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 5px;
+  }
+
+  .hf-fraction-label {
+    font-family: 'ABCDiatypeRounded', sans-serif;
+    font-weight: 700;
+    font-size: 16px;
+    line-height: 1.1;
+    color: #000;
+    text-transform: uppercase;
+    display: block;
+  }
+
+  .hf-footer {
+    background: #000;
+    height: 60px;
+    border-radius: 30px 30px 0 0;
+    flex-shrink: 0;
+    margin-top: auto;
+  }
+
+  /* На финале — заголовок чуть крупнее, чем на главной */
+  
+
+  @media (min-width: 391px) {
+    #screen-home,
+    #screen-finale {
+      padding: 0 24px;
+    }
+  }
+
+  /* ===== INFO-СТРАНИЦЫ (Schema, Pro deti) — изолированы от квеста ===== */
+  /* Используют те же .sz-card-area, .sz-card, .sz-audio-btn, что и темы. */
+
+  #screen-info-schema,
+  #screen-info-deti {
+    background: #d1f492;
+    min-height: 100vh;
+    padding: 0;
+    animation: fadeIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+  }
+
+  @media (min-width: 391px) {
+    #screen-info-schema,
+    #screen-info-deti {
+      padding: 0 24px;
+    }
+  }
+
+  /* Несколько карточек подряд на info-странице */
+  .sz-card-area + .sz-card-area {
+    margin-top: 30px;
+  }
+
+  /* Первая карточка info-страницы без иллюстрации над ней —
+     отступ от хедера ровно как у .sz-title (27px) + воздух 30px */
+  .sz-card-area--first {
+    margin-top: 57px;
+  }
+
+  /* === Schema — длинный текст под карточкой ===
+     ABCDiatypeEdu Medium 16px — body-текст системы. */
+  .info-schema-text {
+    font-family: 'ABCDiatypeEdu', sans-serif;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 1.1;
+    color: #000;
+    width: 330px;
+    max-width: calc(100% - 60px);
+    margin: 30px 30px 40px;
+  }
+
+  .info-schema-text p + p {
+    margin-top: 1em;
+  }
+
+  /* === Pro deti — заголовки секций — как .sz-title === */
+  .info-section-title {
+    font-family: 'ABCDiatypeRoundedSemiMono', sans-serif;
+    font-weight: 700;
+    font-size: 44px;
+    line-height: 1;
+    color: #000;
+    padding: 0 30px;
+    margin: 50px 0 20px;
+    letter-spacing: 0;
+  }
+
+  /* Первый заголовок отступает от хедера 27px (как .sz-title) */
+  .info-deti-main > .info-section-title:first-child {
+    margin-top: 27px;
+  }
+
+  /* Низ страницы — отступ перед футером */
+  .info-bottom-spacer {
+    height: 30px;
+  }
+
+  /* Слоёный порядок на info-страницах: каждый следующий блок (заголовок или карточка)
+     рисуется ПОД предыдущим. Это нужно потому, что у .sz-audio-btn лаймовый круг 82×82
+     торчит за пределы карточки, и без z-index он накладывался бы на следующую карточку.
+     Schema: первая карточка → текст под ней (статичный текст z-index не нужен).
+     Pro deti: 5 заголовков + 11 карточек, всего 16 потенциальных детей. */
+  #screen-info-schema .sz-main > * {
+    position: relative;
+  }
+  #screen-info-schema .sz-main > *:nth-child(1) { z-index: 30; }
+  #screen-info-schema .sz-main > *:nth-child(2) { z-index: 29; }
+
+  .info-deti-main > * {
+    position: relative;
+  }
+  .info-deti-main > *:nth-child(1)  { z-index: 30; }
+  .info-deti-main > *:nth-child(2)  { z-index: 29; }
+  .info-deti-main > *:nth-child(3)  { z-index: 28; }
+  .info-deti-main > *:nth-child(4)  { z-index: 27; }
+  .info-deti-main > *:nth-child(5)  { z-index: 26; }
+  .info-deti-main > *:nth-child(6)  { z-index: 25; }
+  .info-deti-main > *:nth-child(7)  { z-index: 24; }
+  .info-deti-main > *:nth-child(8)  { z-index: 23; }
+  .info-deti-main > *:nth-child(9)  { z-index: 22; }
+  .info-deti-main > *:nth-child(10) { z-index: 21; }
+  .info-deti-main > *:nth-child(11) { z-index: 20; }
+  .info-deti-main > *:nth-child(12) { z-index: 19; }
+  .info-deti-main > *:nth-child(13) { z-index: 18; }
+  .info-deti-main > *:nth-child(14) { z-index: 17; }
+  .info-deti-main > *:nth-child(15) { z-index: 16; }
+  .info-deti-main > *:nth-child(16) { z-index: 15; }
+  .info-deti-main > *:nth-child(17) { z-index: 14; }
+
+</style>
+</head>
+<body>
+
+<div class="app">
+
+<!-- ===================================================== -->
+<!-- ГЛАВНЫЙ ЭКРАН — без параметра в URL (новый дизайн) -->
+<!-- ===================================================== -->
+<section id="screen-home" class="screen">
+  <div class="hf-shell">
+    <div class="hf-header">
+      <span class="hf-header-title">Anatomie města</span>
+      <span class="hf-header-meta">Ateliér plánování a rozvoje MČ Praha 5</span>
+    </div>
+
+    <div class="hf-main">
+      <h1 class="hf-title hf-title--top">Tvoje čtvrť<br>má tři<br>písmena.</h1>
+
+      <p class="hf-lead">Ř, P, Z — tři složky, podle kterých poznáš,<br>jak se v ulici cítíš. Najdi je na výstavě.</p>
+
+      <div class="hf-circles" data-home-circles></div>
+
+      <p class="hf-status" data-home-status></p>
+
+      <div class="hf-bottom">
+        <div class="hf-bottom-left">
+          <a class="hf-action-link" href="https://www.praha5.cz" target="_blank" rel="noopener">více informací v Generelu veřejných prostranství MČ Praha 5 ↗</a>
+        </div>
+        <div class="hf-yellow-wrap">
+          <div class="hf-yellow-circle">
+            <div class="hf-yellow-content">
+              <span class="hf-fraction" data-home-fraction>0/3</span>
+              <span class="hf-fraction-label">Nalezeno</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hf-footer"></div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- SCREEN Z — ZELEŇ (nový design podle Figmy) -->
+<!-- ===================================================== -->
+<section id="screen-z" class="screen theme-screen sz-screen">
+  <div class="sz-shell">
+    <div class="sz-header">
+      <span class="sz-header-title">Anatomie města</span>
+      <span class="sz-header-meta">Ateliér plánování a rozvoje MČ Praha 5</span>
+    </div>
+
+    <div class="sz-main">
+
+      <h1 class="sz-title">Funkční<br><span class="sz-title-nowrap">a čitelná</span><br>zeleň</h1>
+
+      <div class="sz-illustration">
+        <dotlottie-wc id="sz-lottie" class="sz-lottie" src="https://lottie.host/9f34dd20-f752-4625-9783-fa95d41e3c7d/FZUwhlj4eA.lottie" autoplay loop></dotlottie-wc>
+      </div>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přečíst text nahlas"></button>
+        <audio data-audio src="audio/z.mp3" preload="metadata"></audio>
+        <div class="sz-card" data-easy-read>
+          <p>Stromy, trávníky nebo keře dávají místům charakter a propojují je mezi sebou. Díky nim město lépe funguje – nejen na pohled, ale i v každodenním životě. V létě dělají stín, čistí vzduch a po dešti nasávají vodu jako houba. Zasadit zeleň ve městě a dobře se o ni starat není samozřejmost. Je to vlastně malá věda. Stačí to podcenit – a město se začne měnit. Místo stromů asfalt. Místo stínu horko. Město se snadno promění v rozpálenou poušť z asfaltu, kde nelze žít. A nejde jen o nás. Některá místa jsou důležitá i pro další části živého světa – pro zvířata, hmyz nebo rostliny. Bez nich by město nefungovalo tak, jak má. A vlastně bychom tu nebyli ani my. Proto na ně nesmíme zapomínat. Třeba na to, kudy se mohou zvířata bezpečně pohybovat – přes přechody, podchody nebo zelené koridory. Město není jen pro lidi. Je to společný prostor pro život.</p>
+        </div>
+      </div>
+
+      <div class="sz-bottom">
+        <a class="sz-more-link" href="https://www.praha5.cz" target="_blank" rel="noopener">více informací v Generelu veřejných prostranství MČ Praha 5 ↗</a>
+        <div class="sz-cta-wrap">
+          <div class="sz-yellow-circle">
+            <div class="sz-circle-content">
+              <span class="sz-fraction" data-fraction>1/3</span>
+              <span class="sz-cta-label" data-cta-label>Najdi zbylé QR kódy na výstavě</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sz-progress" aria-hidden="true">
+        <div class="letters-row" data-letters-row></div>
+        <div class="sz-counter-text" data-counter></div>
+      </div>
+
+    </div>
+
+    <div class="sz-footer"></div>
+  </div>
+
+</section>
+
+<!-- ===================================================== -->
+<!-- ЭКРАН ТЕМЫ Ř — ŘÁD -->
+<!-- ===================================================== -->
+<section id="screen-r" class="screen theme-screen sz-screen">
+  <div class="sz-shell">
+    <div class="sz-header">
+      <span class="sz-header-title">Anatomie města</span>
+      <span class="sz-header-meta">Ateliér plánování a rozvoje MČ Praha 5</span>
+    </div>
+
+    <div class="sz-main">
+
+      <h1 class="sz-title">Řád<br><span class="sz-title-nowrap">a role</span><br>míst</h1>
+
+      <div class="sz-illustration">
+        <div class="sz-lottie-placeholder">
+          <span>Místo pro Lottie animaci<br>písmene Ř</span>
+        </div>
+      </div>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přečíst text nahlas"></button>
+        <audio data-audio src="audio/r.mp3" preload="metadata"></audio>
+        <div class="sz-card" data-easy-read>
+          <p>Každé veřejné prostranství má jinou roli – a proto má i jinou podobu. Liší se tím, kolik lidí je používá a jak intenzivně. Díky tomu víme, kde má smysl co dělat a jak se o místa starat do budoucna. Proto vzniká i Generel veřejných prostranství – dává každému místu roli a úkol. Kvalitní veřejná prostranství přitahují lidi. Je lepší procházet kolem místa, kde se dá zastavit, pokecat s kámoši nebo jen tak sedět a koukat. Kde se za okny něco děje – někdo si kupuje zmrzlinu, jiný sedí u stolu. V parku nebo na ulici, kde se dá ležet v trávě, hrát si nebo si číst. Na to, aby taková místa ve městě dobře fungovala, je potřeba myslet při navrhování! Rozlišujeme velká a důležitá místa od menších každodenních plácků. Některá místa jsou klidná a sousedská, jiná rušná a plná pohybu. Jedno náměstí je jako obývák, jiné spíš jako nádraží. V každém se cítíte jinak a plní jiný úkol. Když víme, jaký typ místa kde je, můžeme ho lépe navrhnout i o něj pečovat.</p>
+        </div>
+      </div>
+
+      <div class="sz-bottom">
+        <a class="sz-more-link" href="https://www.praha5.cz" target="_blank" rel="noopener">více informací v Generelu veřejných prostranství MČ Praha 5 ↗</a>
+        <div class="sz-cta-wrap">
+          <div class="sz-yellow-circle">
+            <div class="sz-circle-content">
+              <span class="sz-fraction" data-fraction>1/3</span>
+              <span class="sz-cta-label" data-cta-label>Najdi zbylé QR kódy na výstavě</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sz-progress" aria-hidden="true">
+        <div class="letters-row" data-letters-row></div>
+        <div class="sz-counter-text" data-counter></div>
+      </div>
+
+    </div>
+
+    <div class="sz-footer"></div>
+  </div>
+
+</section>
+
+<!-- ===================================================== -->
+<!-- ЭКРАН ТЕМЫ P — POHYB -->
+<!-- ===================================================== -->
+<section id="screen-p" class="screen theme-screen sz-screen">
+  <div class="sz-shell">
+    <div class="sz-header">
+      <span class="sz-header-title">Anatomie města</span>
+      <span class="sz-header-meta">Ateliér plánování a rozvoje MČ Praha 5</span>
+    </div>
+
+    <div class="sz-main">
+
+      <h1 class="sz-title"><span class="sz-title-nowrap">Pohyb pro</span><br>všechny</h1>
+
+      <div class="sz-illustration sz-illustration--short-title sz-illustration--push-down">
+        <dotlottie-wc class="sz-lottie" src="https://lottie.host/aa3711f9-ffb8-4cd2-9b08-da793b8a097e/5RP9UVFBmi.lottie" autoplay loop></dotlottie-wc>
+      </div>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přečíst text nahlas"></button>
+        <audio data-audio src="audio/p.mp3" preload="metadata"></audio>
+        <div class="sz-card" data-easy-read>
+          <p>Vytvořit dobře fungující ulici nebo náměstí je vlastně docela oříšek. Protože každý od ní čeká něco jiného. Někdo chce hlavně rychle projet pryč. A jiný si chce posedět, potřebuje někam dojít, někdo chce jet na kole, jiný se nechce bát přejít, má vozíček nebo malé dítě a kočárek. A teď to zkuste dát dohromady. Dnes to vypadá tak, že auta z ulic nemizí – ale zpomalují. Ulice by měla být méně závodní dráha a víc patřit chodcům a cyklistům. Parkování se posouvá tam, kde dává smysl. Někde zůstává, jinde ustupuje – třeba stromům, lavičkám nebo širším chodníkům. Řidiči mají jasněji dané, kde stát a kudy jet. Chodci mají víc prostoru a lepší přehled. A výsledkem by měla být ulice, kde se dá nejen projet, ale i normálně žít. Řidič auta by měl jet tak rychle, aby stačil postřehnout, že někomu uteklo dítě do cesty, nebo stihl zabrzdit, když přechází chodec, kterého si nevšiml.</p>
+        </div>
+      </div>
+
+      <div class="sz-bottom">
+        <a class="sz-more-link" href="https://www.praha5.cz" target="_blank" rel="noopener">více informací v Generelu veřejných prostranství MČ Praha 5 ↗</a>
+        <div class="sz-cta-wrap">
+          <div class="sz-yellow-circle">
+            <div class="sz-circle-content">
+              <span class="sz-fraction" data-fraction>1/3</span>
+              <span class="sz-cta-label" data-cta-label>Najdi zbylé QR kódy na výstavě</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="sz-progress" aria-hidden="true">
+        <div class="letters-row" data-letters-row></div>
+        <div class="sz-counter-text" data-counter></div>
+      </div>
+
+    </div>
+
+    <div class="sz-footer"></div>
+  </div>
+
+</section>
+
+
+
+<!-- ===================================================== -->
+<!-- ФИНАЛЬНЫЙ ЭКРАН — все 4 найдены (новый дизайн) -->
+<!-- ===================================================== -->
+<section id="screen-finale" class="screen">
+  <div class="hf-shell">
+    <div class="hf-header">
+      <span class="hf-header-title">Anatomie města</span>
+      <span class="hf-header-meta">Ateliér plánování a rozvoje MČ Praha 5</span>
+    </div>
+
+    <div class="hf-main">
+      <h1 class="hf-title hf-title--top">Tohle je<br>tvoje čtvrť.</h1>
+
+      <p class="hf-lead">Tři složky, ze kterých se skládá kvalitní veřejný prostor. Teď se podívej ven jinýma očima — ulice, kterou každý den procházíš, má taky svoje Řád, Pohyb a Zeleň.</p>
+
+      <div class="hf-circles" data-finale-circles></div>
+
+      <div class="hf-bottom">
+        <div class="hf-bottom-left">
+          <a class="hf-action-link" href="?" data-reset>Projít znovu ↗</a>
+          <a class="hf-action-link" href="https://www.praha5.cz" target="_blank" rel="noopener">více informací v Generelu veřejných prostranství MČ Praha 5 ↗</a>
+        </div>
+        <div class="hf-yellow-wrap">
+          <div class="hf-yellow-circle">
+            <div class="hf-yellow-content">
+              <span class="hf-fraction">3/3</span>
+              <span class="hf-fraction-label">Hotovo</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hf-footer"></div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- INFO: SCHEMA SPRÁVCŮ — ?info=schema -->
+<!-- Изолированная страница, не часть квеста. -->
+<!-- ===================================================== -->
+<section id="screen-info-schema" class="screen">
+  <div class="sz-shell">
+    <div class="sz-header">
+      <span class="sz-header-title">Anatomie města</span>
+      <span class="sz-header-meta">Ateliér plánování a rozvoje MČ Praha 5</span>
+    </div>
+
+    <div class="sz-main">
+
+      <div class="sz-card-area sz-card-area--first">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přečíst text nahlas"></button>
+        <audio data-audio src="audio/schema.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Schéma vlastnictví a správců jednotlivých částí a prvků veřejných prostranství</p>
+        </div>
+      </div>
+
+      <div class="info-schema-text">
+        <p>Když se rozhlédnete třeba na Anděl, možná máte pocit, že stojíte v jednom městském prostoru, o který se stará městská část Praha 5. Ve skutečnosti je to ale mnohem složitější. Jeden takový prostor spravuje klidně deset i víc různých institucí (včetně Prahy 5). Silnice má jednoho správce, chodník jiného, stromy dalšího. Podobné je to i se zelení – strom u silnice spravuje TSK, ale v parku ho mají na starosti třeba Lesy hl. m. Prahy. Praha 5 přitom sama nespravuje většinu ulic – stará se hlavně o parky, hřiště a část veřejného prostoru.</p>
+
+        <p>Do toho vstupují technické sítě – voda, plyn, elektřina – které mají na starosti další specializované firmy. A někdy i soukromníci, třeba u reklam nebo předzahrádek. A třeba lampa – ta může patřit Technologie hlavního města Prahy, ale zařízení na ní může spravovat Dopravní podnik nebo technická správa komunikací. To všechno znamená, že když se ve veřejném prostoru něco řeší, často to není otázka jednoho rozhodnutí, ale domluvy mnoha různých aktérů. Městská část tak může ovlivnit jen část veřejných prostranství.</p>
+
+        <p>A právě tohle schéma ukazuje – že město není jeden správce, ale složitá síť vztahů. A i obyčejná ulice je ve skutečnosti výsledkem neustálé koordinace. Takže když se ve městě něco mění, často to není jedno rozhodnutí, ale spíš domluva mezi spoustou různých stran. A právě v tom je to zajímavé – veřejná prostranství vlastně vznikají neustálým vyjednáváním. Možná i proto někdy věci trvají déle, než bychom chtěli… Ale zároveň je to docela dobrý obraz demokracie v praxi – není dokonalá ani rychlá, ale když se o ní snažíme, můžeme ji vylepšit a díky tomu veřejný prostor patří všem.</p>
+      </div>
+
+      <div class="info-bottom-spacer"></div>
+
+    </div>
+
+    <div class="sz-footer"></div>
+  </div>
+</section>
+
+<!-- ===================================================== -->
+<!-- INFO: PRO DĚTI — ?info=deti -->
+<!-- Изолированная страница, не часть квеста. -->
+<!-- Множественные аудио-таблетки. Когда играет одно, остальные останавливаются. -->
+<!-- ===================================================== -->
+<section id="screen-info-deti" class="screen">
+  <div class="sz-shell">
+    <div class="sz-header">
+      <span class="sz-header-title">Anatomie města</span>
+      <span class="sz-header-meta">Ateliér plánování a rozvoje MČ Praha 5</span>
+    </div>
+
+    <div class="sz-main info-deti-main">
+
+      <h2 class="info-section-title">Jak se ve<br>městě vyznat?</h2>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přehrát: Jak se ve městě vyznat?"></button>
+        <audio data-audio src="audio/deti/01.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Jak se ve městě vyznat?</p>
+        </div>
+      </div>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přehrát: Pravidla pro růst města"></button>
+        <audio data-audio src="audio/deti/02.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Pravidla pro růst města</p>
+        </div>
+      </div>
+
+      <h2 class="info-section-title">Proč je každé<br>místo jiné?</h2>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přehrát: Proč je každé místo jiné?"></button>
+        <audio data-audio src="audio/deti/03.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Proč je každé místo jiné?</p>
+        </div>
+      </div>
+
+      <h2 class="info-section-title">Kdo má<br>přednost?</h2>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přehrát: Jak se městem chodí?"></button>
+        <audio data-audio src="audio/deti/04.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Jak se městem chodí?</p>
+        </div>
+      </div>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přehrát: Prioritní pěší trasy"></button>
+        <audio data-audio src="audio/deti/05.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Prioritní pěší trasy</p>
+        </div>
+      </div>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přehrát: Cesty k důležitým místům"></button>
+        <audio data-audio src="audio/deti/06.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Cesty k důležitým místům</p>
+        </div>
+      </div>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přehrát: Bezpečné cesty pro děti"></button>
+        <audio data-audio src="audio/deti/07.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Bezpečné cesty pro děti</p>
+        </div>
+      </div>
+
+      <h2 class="info-section-title">K čemu<br>je zeleň?</h2>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přehrát: Jak zeleň drží město pohromadě?"></button>
+        <audio data-audio src="audio/deti/08.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Jak zeleň drží město pohromadě?</p>
+        </div>
+      </div>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přehrát: Zelená páteř města"></button>
+        <audio data-audio src="audio/deti/09.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Zelená páteř města</p>
+        </div>
+      </div>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přehrát: Zelené ulice a stromořadí"></button>
+        <audio data-audio src="audio/deti/10.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Zelené ulice a stromořadí</p>
+        </div>
+      </div>
+
+      <h2 class="info-section-title">Kde chceme<br>žít?</h2>
+
+      <div class="sz-card-area">
+        <button type="button" class="sz-audio-btn" data-audio-btn aria-label="Přehrát: Kde chceme žít?"></button>
+        <audio data-audio src="audio/deti/11.mp3" preload="metadata"></audio>
+        <div class="sz-card">
+          <p>Kde chceme žít?</p>
+        </div>
+      </div>
+
+      <div class="info-bottom-spacer"></div>
+
+    </div>
+
+    <div class="sz-footer"></div>
+  </div>
+</section>
+
+</div>
+
+<script>
+/* ============================================================
+   Логика квеста — localStorage + URL-параметры
+   ============================================================
+
+   Как это работает:
+   1. Пользователь сканирует QR → переходит на URL вида ?found=z
+   2. Скрипт читает параметр, добавляет букву в localStorage
+   3. Показывает экран соответствующей темы
+   4. Если все 4 собраны → после просмотра темы ведёт на финал
+   5. Без параметра → главный экран с прогрессом
+*/
+
+// ============================================================
+// Конфигурация квеста
+// ============================================================
+// Сейчас 3 буквы: Ř (Řád), P (Pohyb), Z (Zeleň).
+// Раньше было 4 (Z, B, P, V). Если клиент снова захочет 4 —
+// см. инструкцию в HANDOFF.md, раздел "Как вернуть 4 буквы".
+//
+// Ř хранится в URL и localStorage как 'r' (без диакритики),
+// потому что URL-параметры с диакритикой работают капризно.
+// На экране и в счётчике отображается как Ř.
+
+const LETTERS = ['r', 'p', 'z'];
+const TOTAL = LETTERS.length; // используется для отображения 1/3, 2/3, 3/3
+const STORAGE_KEY = 'anatomie_mesta_found';
+const LETTER_NAMES = {
+  r: 'Řád',
+  p: 'Pohyb',
+  z: 'Zeleň'
+};
+// Как буква отображается на экране (Ř вместо R)
+const LETTER_DISPLAY = {
+  r: 'Ř',
+  p: 'P',
+  z: 'Z'
+};
+
+// Info-страницы — изолированы от квеста. URL: ?info=schema, ?info=deti
+const INFO_SCREENS = ['schema', 'deti'];
+
+// ============================================================
+// Работа с localStorage
+// ============================================================
+
+function getFound() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (!raw) return [];
+    return JSON.parse(raw).filter(l => LETTERS.includes(l));
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveFound(arr) {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(arr));
+  } catch (e) {
+    // Если localStorage заблокирован (приватный режим Safari),
+    // работаем только в пределах сессии
+    console.warn('localStorage недоступен');
+  }
+}
+
+function addFound(letter) {
+  const found = getFound();
+  if (!found.includes(letter)) {
+    found.push(letter);
+    saveFound(found);
+  }
+  return found;
+}
+
+function resetFound() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+  } catch (e) {}
+}
+
+// ============================================================
+// Отображение прогресса
+// ============================================================
+
+function renderProgress(container, found, currentLetter) {
+  container.innerHTML = '';
+  LETTERS.forEach(letter => {
+    const a = document.createElement('a');
+    a.className = 'letter-btn';
+    a.dataset.letter = letter;
+    a.textContent = LETTER_DISPLAY[letter];
+    a.href = '?found=' + letter;
+    if (found.includes(letter)) a.classList.add('found');
+    container.appendChild(a);
+  });
+}
+
+function renderCounter(container, found, currentLetter) {
+  const remaining = LETTERS.filter(l => !found.includes(l));
+
+  if (found.length === 0) {
+    container.innerHTML = 'Zatím jsi nenašel/a žádné písmeno. <br>Hledej QR kódy na výstavě.';
+  } else if (found.length === TOTAL) {
+    container.innerHTML = '<strong>Máš všechna písmena.</strong> Chvíli počkej, ukážu ti, co to znamená…';
+  } else if (remaining.length === 1) {
+    container.innerHTML = 'Ještě jedno písmeno: <strong>' + LETTER_DISPLAY[remaining[0]] + '</strong> — ' + LETTER_NAMES[remaining[0]] + '.';
+  } else {
+    container.innerHTML = 'Našel/a jsi <strong>' + found.length + ' ze ' + TOTAL + '</strong>. Zbývají: ' + remaining.map(l => LETTER_DISPLAY[l]).join(', ') + '.';
+  }
+}
+
+// Главный экран — большие круги-буквы.
+// Найденные кликабельные (ведут к экрану темы), ненайденные — статичные.
+function renderHomeCircles(container, found) {
+  container.innerHTML = '';
+  LETTERS.forEach(letter => {
+    const isFound = found.includes(letter);
+    const el = document.createElement(isFound ? 'a' : 'span');
+    el.className = 'hf-circle' + (isFound ? ' found' : '');
+    el.textContent = LETTER_DISPLAY[letter];
+    if (isFound) el.href = '?found=' + letter;
+    container.appendChild(el);
+  });
+}
+
+// Финальный экран — все буквы найдены, все круги кликабельные (можно вернуться к теме)
+function renderFinaleCircles(container, found) {
+  container.innerHTML = '';
+  LETTERS.forEach(letter => {
+    const a = document.createElement('a');
+    a.className = 'hf-circle found';
+    a.textContent = LETTER_DISPLAY[letter];
+    a.href = '?found=' + letter;
+    container.appendChild(a);
+  });
+}
+
+function renderHomeStatus(container, found) {
+  const remaining = LETTERS.filter(l => !found.includes(l));
+  if (found.length === 0) {
+    container.innerHTML = 'Zatím jsi nenašel/a žádné písmeno.<br>Hledej QR kódy na výstavě.';
+  } else if (remaining.length === 1) {
+    container.textContent = 'Ještě jedno písmeno: ' + LETTER_DISPLAY[remaining[0]] + ' — ' + LETTER_NAMES[remaining[0]] + '.';
+  } else if (remaining.length === 0) {
+    container.textContent = 'Máš všechna písmena.';
+  } else {
+    container.textContent = 'Zbývají: ' + remaining.map(l => LETTER_DISPLAY[l]).join(', ') + '.';
+  }
+}
+
+// ============================================================
+// Роутинг по URL-параметру ?found=X
+// ============================================================
+
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const screen = document.getElementById(id);
+  if (screen) screen.classList.add('active');
+  window.scrollTo(0, 0);
+}
+
+function init() {
+  const params = new URLSearchParams(window.location.search);
+  const foundParam = params.get('found');
+  const showFinale = params.get('finale') === '1';
+  const infoParam = params.get('info');
+
+  // Info-страницы (Schema, Pro deti) — изолированы от квеста.
+  // Не трогают localStorage, не имеют жёлтого круга.
+  if (infoParam && INFO_SCREENS.includes(infoParam)) {
+    showScreen('screen-info-' + infoParam);
+    return;
+  }
+
+  // Финальный экран — если все буквы найдены и пришли через ссылку
+  if (showFinale) {
+    const found = getFound();
+    if (found.length === TOTAL) {
+      const finaleCircles = document.querySelector('[data-finale-circles]');
+      if (finaleCircles) renderFinaleCircles(finaleCircles, found);
+      showScreen('screen-finale');
+      return;
+    }
+  }
+
+  // QR отсканирован — показываем тему + сохраняем букву
+  if (foundParam && LETTERS.includes(foundParam)) {
+    const found = addFound(foundParam);
+    showScreen('screen-' + foundParam);
+
+    // Обновляем прогресс на этой странице
+    const screen = document.getElementById('screen-' + foundParam);
+    const progressContainer = screen.querySelector('[data-letters-row]');
+    const counterContainer = screen.querySelector('[data-counter]');
+    if (progressContainer) renderProgress(progressContainer, found, foundParam);
+    if (counterContainer) renderCounter(counterContainer, found, foundParam);
+
+    return;
+  }
+
+  // Главный экран — без параметров или с неверным параметром
+  const found = getFound();
+  const homeCircles = document.querySelector('[data-home-circles]');
+  const homeStatus = document.querySelector('[data-home-status]');
+  const homeFraction = document.querySelector('[data-home-fraction]');
+  if (homeCircles) renderHomeCircles(homeCircles, found);
+  if (homeStatus) renderHomeStatus(homeStatus, found);
+  if (homeFraction) homeFraction.textContent = found.length + '/' + TOTAL;
+  showScreen('screen-home');
+}
+
+// ============================================================
+// Обработчики
+// ============================================================
+
+document.addEventListener('click', (e) => {
+  // Кнопка "Projít znovu" — сбрасываем прогресс
+  if (e.target.matches('[data-reset]')) {
+    e.preventDefault();
+    resetFound();
+    window.location.href = '?';
+  }
+});
+
+// Запуск
+document.addEventListener('DOMContentLoaded', init);
+
+/* ============================================================
+   Аудио + dynamický zlomek X/3 + info-страницы
+   ============================================================
+   Поддерживает множественные пары [data-audio-btn] / [data-audio]
+   на одном экране (нужно для info-deti). При нажатии play на одном
+   аудио — все остальные останавливаются.
+*/
+
+document.addEventListener('DOMContentLoaded', function () {
+
+  // Находим активный экран. Это может быть .sz-screen (темы) или info-экран.
+  // Главная и финал не имеют ни аудио, ни жёлтого круга.
+  var activeScreen =
+    document.querySelector('.sz-screen.active') ||
+    document.querySelector('#screen-info-schema.active') ||
+    document.querySelector('#screen-info-deti.active') ||
+    document.querySelector('.sz-screen'); // fallback для прямого открытия HTML
+
+  if (!activeScreen) {
+    // Главная или финал — тут только типографика
+    applyNonBreakingSpaces();
+    return;
+  }
+
+  // === Динамический счётчик в жёлтом круге — только для квестовых экранов ===
+  if (activeScreen.classList.contains('sz-screen')) {
+    setupYellowCircle(activeScreen);
+  }
+
+  // === Аудио — общая логика для всех экранов с [data-audio] ===
+  setupAudio(activeScreen);
+
+  applyNonBreakingSpaces();
+});
+
+// --- Жёлтый круг с прогрессом (только для квестовых экранов) ---
+function setupYellowCircle(activeScreen) {
+  setTimeout(function () {
+    var found = getFound();
+    var fractionEl = activeScreen.querySelector('[data-fraction]');
+    var labelEl = activeScreen.querySelector('[data-cta-label]');
+    var ctaWrap = activeScreen.querySelector('.sz-cta-wrap');
+
+    if (!ctaWrap) return;
+
+    var isComplete = found.length === TOTAL;
+
+    if (fractionEl) {
+      fractionEl.textContent = isComplete ? 'Máš vše' : (found.length + '/' + TOTAL);
+    }
+    if (labelEl) {
+      labelEl.textContent = isComplete ? 'Klikni sem ↗' : 'Najdi zbylé QR\u00A0kódy na výstavě';
+    }
+
+    // Оборачиваем жёлтый круг в ссылку (один раз)
+    if (!ctaWrap.querySelector('a.sz-cta-finale-link')) {
+      var yellowCircle = ctaWrap.querySelector('.sz-yellow-circle');
+      if (yellowCircle) {
+        var link = document.createElement('a');
+        link.className = 'sz-cta-finale-link';
+        link.href = isComplete ? '?finale=1' : '?';
+        link.setAttribute('aria-label', isComplete
+          ? 'Máš všechna písmena, klikni pro závěr'
+          : 'Přejít na přehled všech písmen');
+        yellowCircle.parentNode.insertBefore(link, yellowCircle);
+        link.appendChild(yellowCircle);
+      }
+    } else {
+      var existingLink = ctaWrap.querySelector('a.sz-cta-finale-link');
+      existingLink.href = isComplete ? '?finale=1' : '?';
+    }
+  }, 0);
+}
+
+// --- Аудио: множественные пары [data-audio-btn] + [data-audio] ---
+// Когда играет одно — все остальные останавливаются.
+function setupAudio(activeScreen) {
+  var SVG_PLAY = '<span class="sz-audio-core" aria-hidden="true">' +
+    '<svg viewBox="0 0 70 70" width="70" height="70" xmlns="http://www.w3.org/2000/svg">' +
+      '<rect x="0" y="0" width="70" height="70" fill="none" />' +
+      '<g fill="#fff">' +
+        '<rect x="10" y="29" width="5" height="12" rx="3" />' +
+        '<rect x="19" y="24" width="5" height="22" rx="3" />' +
+        '<rect x="28" y="18" width="5" height="30" rx="3" />' +
+        '<rect x="37" y="25" width="5" height="21" rx="3" />' +
+        '<rect x="46" y="22" width="5" height="25" rx="3" />' +
+        '<rect x="55" y="29" width="5" height="12" rx="3" />' +
+      '</g>' +
+    '</svg>' +
+  '</span>';
+
+  var SVG_STOP = '<span class="sz-audio-core" aria-hidden="true">' +
+    '<svg viewBox="0 0 70 70" width="70" height="70" xmlns="http://www.w3.org/2000/svg">' +
+      '<rect x="0" y="0" width="70" height="70" fill="none" />' +
+      '<rect x="23" y="23" width="24" height="24" rx="4" fill="#fff" />' +
+    '</svg>' +
+  '</span>';
+
+  // Все пары на текущем экране
+  var pairs = [];
+  var buttons = activeScreen.querySelectorAll('[data-audio-btn]');
+  buttons.forEach(function (btn) {
+    // Соответствующий <audio> — ближайший родственник
+    var container = btn.closest('.sz-card-area');
+    var audio = container ? container.querySelector('[data-audio]') : null;
+    pairs.push({ btn: btn, audio: audio, container: container });
+  });
+
+  // Текущий играющий — для остановки конкурентов
+  var currentlyPlaying = null;
+
+  function setIcon(btn, playing, originalLabel) {
+    btn.innerHTML = playing ? SVG_STOP : SVG_PLAY;
+    btn.setAttribute('aria-label', playing ? 'Zastavit přehrávání' : (originalLabel || 'Přehrát'));
+  }
+
+  function stopAll(except) {
+    pairs.forEach(function (p) {
+      if (p === except) return;
+      if (p.audio && !p.audio.paused) {
+        p.audio.pause();
+        p.audio.currentTime = 0;
+      }
+      if (p.btn) setIcon(p.btn, false, p.btn._origLabel);
+    });
+  }
+
+  pairs.forEach(function (p) {
+    if (!p.btn) return;
+
+    // Сохраняем оригинальный aria-label (нужно для возврата иконки play)
+    p.btn._origLabel = p.btn.getAttribute('aria-label') || 'Přehrát';
+    setIcon(p.btn, false, p.btn._origLabel);
+
+    if (!p.audio) {
+      p.btn.disabled = true;
+      p.btn.setAttribute('aria-label', 'Audio momentálně není dostupné');
+      return;
+    }
+
+    p.btn.addEventListener('click', function () {
+      // Уже играет — останавливаем
+      if (!p.audio.paused) {
+        p.audio.pause();
+        p.audio.currentTime = 0;
+        setIcon(p.btn, false, p.btn._origLabel);
+        currentlyPlaying = null;
+        return;
+      }
+
+      // Останавливаем все другие
+      stopAll(p);
+      currentlyPlaying = p;
+
+      // Запускаем
+      var playPromise = p.audio.play();
+      if (playPromise && typeof playPromise.then === 'function') {
+        playPromise.then(function () {
+          setIcon(p.btn, true, p.btn._origLabel);
+        }).catch(function () {
+          setIcon(p.btn, false, p.btn._origLabel);
+          currentlyPlaying = null;
+        });
+      } else {
+        setIcon(p.btn, true, p.btn._origLabel);
+      }
+    });
+
+    p.audio.addEventListener('ended', function () {
+      setIcon(p.btn, false, p.btn._origLabel);
+      if (currentlyPlaying === p) currentlyPlaying = null;
+    });
+
+    p.audio.addEventListener('error', function () {
+      p.btn.disabled = true;
+      p.btn.setAttribute('aria-label', 'Audio momentálně není dostupné');
+    });
+  });
+
+  // Останавливаем воспроизведение, если пользователь свернул вкладку
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) {
+      stopAll(null);
+      currentlyPlaying = null;
+    }
+  });
+}
+
+// Чешская типографика:
+// 1. После однобуквенных предлогов/союзов (a, i, o, u, k, s, v, z, K, S, V, Z) ставим NBSP,
+//    чтобы они не оставались висеть в конце строки.
+// 2. Перед длинным тире (en/em-dash) — тоже NBSP, чтобы не переносилось на начало строки.
+// 3. "QR kódy" / "QR kódů" / "QR kód" — связка должна оставаться вместе.
+// 4. "MČ Praha 5 ↗" — последняя строка ссылки должна держаться вместе.
+function applyNonBreakingSpaces() {
+  var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+  var node;
+  var nodes = [];
+  while ((node = walker.nextNode())) {
+    if (node.nodeValue.trim()) nodes.push(node);
+  }
+  nodes.forEach(function (n) {
+    var orig = n.nodeValue;
+    var t = orig;
+
+    // Многопроходная замена для последовательных предлогов: "A i obyčejná" → "A\u00A0i\u00A0obyčejná".
+    // lookbehind (?<=...) не съедает ведущий символ, поэтому каскад работает за один цикл.
+    var prev;
+    do {
+      prev = t;
+      t = t.replace(/(?<=^|[\s(\u00A0])([aikosuvzAIKOSUVZ])[\s\u00A0]+/g, '$1\u00A0');
+    } while (t !== prev);
+
+    t = t
+      // тире
+      .replace(/\s+([–—])/g, '\u00A0$1')
+      // QR kód / kódy / kódů — связка
+      .replace(/QR\s+(kód[uůy]?)/g, 'QR\u00A0$1')
+      // "MČ Praha 5" + опциональная стрелка — связываем NBSP'ами
+      .replace(/MČ\s+Praha\s+5(\s+↗)?/g, function (m, arrow) {
+        return 'MČ\u00A0Praha\u00A05' + (arrow ? '\u00A0↗' : '');
+      });
+    if (t !== orig) n.nodeValue = t;
+  });
+}
+</script>
+
+
+
+
+</body>
+</html>
