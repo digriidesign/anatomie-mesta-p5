@@ -156,11 +156,15 @@
     z-index: 2;
   }
 
-  /* Когда заголовок занимает 2 строки вместо 3 (например, на P "Pohyb / pro všechny"),
-     иллюстрация поднимается слабее, чтобы карточка снизу начиналась на том же уровне,
-     что и у тем с 3-строчным заголовком. ~42px = высота одной строки .sz-title. */
+  /* Когда заголовок занимает 2 строки вместо 3 (например, на P "Pohyb pro / všechny"),
+     иллюстрация поднимается слабее. */
   .sz-illustration--short-title {
     margin-top: -118px;
+  }
+
+  /* Когда заголовок в одну строку (Ř): компенсируем ещё на одну строку */
+  .sz-illustration--single-line-title {
+    margin-top: -76px;
   }
 
   /* На P Lottie опускается на 25px ниже внутри блока (15+10),
@@ -168,6 +172,12 @@
   .sz-illustration--push-down {
     padding-top: 55px;
     margin-bottom: -25px;
+  }
+
+  /* На Ř — Lottie на 20px ниже (5px выше чем у P) */
+  .sz-illustration--push-down.sz-illustration--push-down-20 {
+    padding-top: 50px;
+    margin-bottom: -20px;
   }
 
   /* Lottie-анимации на всех экранах тем имеют одинаковый размер */
@@ -191,6 +201,13 @@
     width: 330px;
     max-width: calc(100% - 60px);
   }
+
+  /* Индивидуальные сдвиги карточки на темах, чтобы все три начинались на одном уровне (408px).
+     Lottie на каждой теме остаётся на исходной позиции, двигается только карточка
+     и весь следующий за ней блок (более информации, жёлтый круг). */
+  #screen-z .sz-main > .sz-card-area { margin-top: 30px; }
+  #screen-p .sz-main > .sz-card-area { margin-top: 32px; }
+  #screen-r .sz-main > .sz-card-area { margin-top: 34px; }
 
   .sz-audio-btn {
     position: absolute;
@@ -888,12 +905,10 @@
 
     <div class="sz-main">
 
-      <h1 class="sz-title">Řád<br><span class="sz-title-nowrap">a role</span><br>míst</h1>
+      <h1 class="sz-title sz-title-nowrap">Řád ve městě</h1>
 
-      <div class="sz-illustration">
-        <div class="sz-lottie-placeholder">
-          <span>Místo pro Lottie animaci<br>písmene Ř</span>
-        </div>
+      <div class="sz-illustration sz-illustration--single-line-title sz-illustration--push-down sz-illustration--push-down-20">
+        <dotlottie-wc class="sz-lottie" src="https://lottie.host/41585703-0188-4525-81df-04079ab57260/m8f1lrANuu.lottie" autoplay loop></dotlottie-wc>
       </div>
 
       <div class="sz-card-area">
